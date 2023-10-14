@@ -1,8 +1,12 @@
 Populations:
 
   All:
-    - Sample_Example_1
-
-  PopA:
-    - Sample_Example_1
-    - Sample_Example_2
+    - NRRL_Y-2504
+    - TFCN_7W-292-3
+    - DBVPG_3768
+    - DBVPG_3770
+    - DBVPG_3853
+    - DBVPG_3771
+    - DBVPG_3773
+    - DBVPG_3769
+    - DBVPG_3772
