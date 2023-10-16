@@ -1,5 +1,5 @@
 #!/usr/bin/bash -l
-#SBATCH --mem 24G -N 1 -n 1 -c 2 -J slice.GVCFGeno --out logs/GVCFGenoGATK4.slice_%a.%A.log -a 1-8
+#SBATCH --mem 24G -N 1 -n 1 -c 2 -J slice.GVCFGeno --out logs/GVCFGenoGATK4.slice_%a.%A.log -a 1-60
 # might run on short queue if small enough
 # match array jobs (-a 1-4) to the number of chromosomes - if you have a lot then you can change the GVCF_INTERVAL in config.txt
 # and then can run in batches of 5, 10 etc to combine ranges to run through
@@ -110,13 +110,24 @@ do
 	if [[ ! -f $FILTERSNP.gz || $STEM.$TYPE.vcf.gz -nt $FILTERSNP.gz ]]; then
 	    gatk VariantFiltration --output $FILTERSNP \
 		--variant $STEM.$TYPE.vcf.gz -R $REFGENOME \
-		--cluster-window-size 10  \
-		--filter-expression "QD < 2.0" --filter-name QualByDepth \
-		--filter-expression "MQ < 40.0" --filter-name MapQual \
-		--filter-expression "QUAL < 100" --filter-name QScore \
-		--filter-expression "SOR > 4.0" --filter-name StrandOddsRatio \
-		--filter-expression "FS > 60.0" --filter-name FisherStrandBias \
-		--missing-values-evaluate-as-failing --create-output-variant-index false
+		-filter "QD < 2.0" --filter-name "QD2" \
+    -filter "QUAL < 30.0" --filter-name "QUAL30" \
+    -filter "SOR > 3.0" --filter-name "SOR3" \
+    -filter "FS > 60.0" --filter-name "FS60" \
+    -filter "MQ < 40.0" --filter-name "MQ40" \
+    -filter "MQRankSum < -12.5" --filter-name "MQRankSum-12.5" \
+    -filter "ReadPosRankSum < -8.0" --filter-name "ReadPosRankSum-8" \
+    --create-output-variant-index false
+
+
+		#--cluster-window-size 10  \
+
+		#--filter-expression "QD < 2.0" --filter-name QualByDepth \
+		#--filter-expression "MQ < 40.0" --filter-name MapQual \
+		#--filter-expression "QUAL < 100" --filter-name QScore \
+		#--filter-expression "SOR > 4.0" --filter-name StrandOddsRatio \
+		#--filter-expression "FS > 60.0" --filter-name FisherStrandBias \
+		#--missing-values-evaluate-as-failing --create-output-variant-index false
 
 	#	--filter-expression "MQRankSum < -12.5" --filter-name MapQualityRankSum \
 	#	--filter-expression "ReadPosRankSum < -8.0" --filter-name ReadPosRank \
@@ -149,11 +160,12 @@ do
 	    gatk VariantFiltration --output $FILTERINDEL \
 		--variant $STEM.$TYPE.vcf.gz -R $REFGENOME \
 		--cluster-window-size 10  -filter "QD < 2.0" --filter-name QualByDepth \
-		-filter "SOR > 10.0" --filter-name StrandOddsRatio \
-		-filter "FS > 200.0" --filter-name FisherStrandBias \
-		-filter "InbreedingCoeff < -0.8" --filter-name InbreedCoef \
+		-filter "QUAL < 30.0" --filter-name "QUAL30" \
+		-filter "FS > 200.0" --filter-name "FS200" \
+	  	 -filter "FS > 200.0" --filter-name "FS200" \
 		--create-output-variant-index false
-
+		#-filter "SOR > 10.0" --filter-name StrandOddsRatio \
+		#-filter "InbreedingCoeff < -0.8" --filter-name InbreedCoef \
 	#	-filter "ReadPosRankSum < -20.0" --filter-name ReadPosRank \
 	#	-filter "MQRankSum < -12.5" --filter-name MapQualityRankSum \
 
