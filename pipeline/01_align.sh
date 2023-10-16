@@ -1,5 +1,5 @@
 #!/usr/bin/bash -l
-#SBATCH -N 1 -c 16 -n 1 --mem 32gb --out logs/bwa.%a.log --time 2:00:00 -a 1-90 -p short
+#SBATCH -N 1 -c 16 -n 1 --mem 32gb --out logs/bwa.%a.log --time 2:00:00 -a 1-9 -p short
 module load bwa-mem2
 module load samtools
 module load picard

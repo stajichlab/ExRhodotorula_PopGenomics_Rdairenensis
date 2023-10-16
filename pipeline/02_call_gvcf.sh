@@ -1,11 +1,11 @@
 #!/usr/bin/bash -l
-#SBATCH -p short -N 1 -n 1 -c 8 -C xeon --mem 32gb --out logs/make_gvcf.%a.log
+#SBATCH -p short -N 1 -n 1 -c 8 --mem 32gb --out logs/make_gvcf.%a.log -a 1-9
 
 # alt with big datasets do
 ## SBATCH -p intel --time 48:00:00
 
 module load picard
-module load gatk/4
+module load gatk/4.4.0.0
 module load bcftools
 
 MEM=32g
