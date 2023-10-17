@@ -1,0 +1,10 @@
+#!/usr/bin/env Rscript
+library(tidyverse)
+library(purrr)
+library(ggplot2)
+library(cowplot)
+pheno=read_csv("phenotype_association/strain_phenotype.csv")
+snpIn <- read_tsv("phenotype_association/Rdar_v1.All.polymorphicDBVPG_filtered.matrix.tsv.gz", col_names = TRUE)
+keepSNP <- snpIn %>% filter(TYPE != "intergenic") %>% filter(IMPACT=='HIGH') %>% select(c(CHROM,POS,TYPE,IMPACT,GENE,CHANGEPEP,REF,DBVPG_3769,DBVPG_3771,DBVPG_3773,DBVPG_3770,DBVPG_3853,DBVPG_3772,DBVPG_3768))
+print(n=200,keepSNP)
+write_tsv(keepSNP,"Rdar_v1.polymorphicDBVPG_filtered.HIGH_matrix_simple.tsv")
