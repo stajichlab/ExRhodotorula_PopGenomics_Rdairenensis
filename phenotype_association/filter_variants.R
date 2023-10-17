@@ -1,16 +1,7 @@
 #!/usr/bin/env Rscript
 
-library(tidyverse)
-library(purrr)
-library(ggplot2)
-library(cowplot)
 library(vcfR)
 
-snpIn <- read_tsv("phenotype_association/Rdar_v1.All.snpEff.matrix.tsv.gz", col_names = TRUE) %>% select(-c("TFCN_7W-292-3", "NRRL_Y-2504"))
-
-genoCols = c("DBVPG_3768","DBVPG_3769","DBVPG_3770","DBVPG_3771","DBVPG_3772", "DBVPG_3773", "DBVPG_3853")
-
-keepSNP <- snpIn %>% filter(TYPE != "intergenic") %>% unite("geno", DBVPG_3768:DBVPG_3853)
 vcf <- read.vcfR("phenotype_association/Rdar_v1.All.snpEff.vcf.gz")
 dna <- ape::read.dna("phenotype_association/Rhodotorula_dairenensis_NRRL_Y-2504.scaffolds.fa.gz", format = "fasta")
 gff <- read.table("phenotype_association/Rhodotorula_dairenensis_NRRL_Y-2504.gff3.gz", sep="\t", quote="")
